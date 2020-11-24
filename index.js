@@ -17,6 +17,7 @@ const {
 } = require("instapro");
 const ig = require("instagram-scraping");
 const userInstagram = require("user-instagram");
+const { parse } = require("json2csv");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -26,9 +27,13 @@ app.get("/api1", async (req, res) => {
     const { search } = req.query;
     //   const media = await getUserByUsername("akhaykumar");
     const data = await generalSearch(search);
+    const csv = parse(data, { fields: ["field1", "field2", "field3"] });
+    console.log(csv);
+
     res.json(data);
   } catch (error) {
-    res.send(error);
+    console.log("error", error);
+    res.json(error);
   }
 });
 
@@ -38,7 +43,8 @@ app.get("/scrapeTag", async (req, res) => {
     const media = await ig.scrapeTag(search);
     res.json(media);
   } catch (error) {
-    res.send(error);
+    console.log("error", error);
+    res.json(error);
   }
 });
 
@@ -53,7 +59,8 @@ app.get("/userInstagram", async (req, res) => {
     // const media = await userInstagram(search);
     res.json(data);
   } catch (error) {
-    res.send(error);
+    console.log("error", error);
+    res.json(error);
   }
 });
 
