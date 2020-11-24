@@ -22,27 +22,39 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/api1", async (req, res) => {
-  const { search } = req.query;
-  //   const media = await getUserByUsername("akhaykumar");
-  const data = await generalSearch(search);
-  res.json(data);
+  try {
+    const { search } = req.query;
+    //   const media = await getUserByUsername("akhaykumar");
+    const data = await generalSearch(search);
+    res.json(data);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.get("/scrapeTag", async (req, res) => {
-  const { search } = req.query;
-  const media = await ig.scrapeTag(search);
-  res.json(media);
+  try {
+    const { search } = req.query;
+    const media = await ig.scrapeTag(search);
+    res.json(media);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.get("/userInstagram", async (req, res) => {
-  const { search } = req.query;
-  const data = await generalSearch(search);
-  const detailsusers = await Promise.all(
-    data.users.map(async (item) => await userInstagram(item.user.username))
-  );
-  data.users = detailsusers;
-  // const media = await userInstagram(search);
-  res.json(data);
+  try {
+    const { search } = req.query;
+    const data = await generalSearch(search);
+    const detailsusers = await Promise.all(
+      data.users.map(async (item) => await userInstagram(item.user.username))
+    );
+    data.users = detailsusers;
+    // const media = await userInstagram(search);
+    res.json(data);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 const port = process.env.PORT || 3000;
